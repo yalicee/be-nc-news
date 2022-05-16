@@ -38,3 +38,40 @@ describe("GET /api/topics", () => {
       });
   });
 });
+
+describe("GET /api/articles/:articles_id", () => {
+  test("200: responds with article object", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body }) => {
+        const { article } = body;
+        expect(article.article_id).toBe(1);
+        expect(article).toMatchObject({
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          article_id: expect.any(Number),
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+        });
+      });
+  });
+  test("400: responds with bad request if given wrong article_id", () => {
+    return request(app)
+      .get("/api/articles/article_5")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("bad request");
+      });
+  });
+  test("404: responds with invalid filepath if given wrong article_id", () => {
+    return request(app)
+      .get("/api/articles/99999999")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("no article found for article_id 99999999");
+      });
+  });
+});
