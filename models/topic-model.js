@@ -8,3 +8,5 @@ exports.selectTopics = () => {
     return result.rows;
   });
 };
+
+exports.updateArticle = () => {};

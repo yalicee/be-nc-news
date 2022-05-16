@@ -38,3 +38,29 @@ describe("GET /api/topics", () => {
       });
   });
 });
+
+xdescribe("PATCH /api/artices/:articled_id", () => {
+  test("201: request body is accepted and responds with updated articled", () => {
+    const updatedArticle1 = {
+      inc_votes: 1,
+    };
+    const updatedArticle2 = {
+      inc_votes: -100,
+    };
+    return request(app)
+      .patch("/api/artices/1")
+      .send(updatedArticle1)
+      .expect(201)
+      .then(({ body }) => {
+        const { article } = body;
+        expect(article).toEqual({
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: 1594329060000,
+          votes: 101,
+        });
+      });
+  });
+});

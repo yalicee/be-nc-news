@@ -1,8 +1,10 @@
 const express = require("express");
-const { getTopics } = require("./controllers/topic-controller");
+const { getTopics, patchArticle } = require("./controllers/topic-controller");
 
 const app = express();
 app.get("/api/topics", getTopics);
+
+app.patch("/api/artices/1", patchArticle);
 
 app.use("/*", (req, res, next) => {
   res.status(404).send({ msg: "not found" });
