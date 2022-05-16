@@ -58,12 +58,20 @@ describe("GET /api/articles/:articles_id", () => {
         });
       });
   });
-  test("400: responds with invalid filepath if given wrong article_id", () => {
+  test("400: responds with bad request if given wrong article_id", () => {
     return request(app)
       .get("/api/articles/article_5")
       .expect(400)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("invalid filepath");
+        expect(msg).toBe("bad request");
+      });
+  });
+  test("404: responds with invalid filepath if given wrong article_id", () => {
+    return request(app)
+      .get("/api/articles/99999999")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("no article found for article_id 99999999");
       });
   });
 });

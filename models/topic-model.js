@@ -4,8 +4,8 @@ exports.selectTopics = () => {
   const queryValues = [];
   let queryStr = "SELECT * FROM topics";
 
-  return db.query(queryStr, queryValues).then((result) => {
-    return result.rows;
+  return db.query(queryStr, queryValues).then(({ rows }) => {
+    return rows;
   });
 };
 
@@ -15,9 +15,15 @@ exports.selectArticleById = (article_id) => {
   queryStr += " WHERE article_id = $1";
 
   if (isNaN(article_id)) {
-    return Promise.reject({ status: 400, msg: "invalid filepath" });
+    return Promise.reject({ status: 400, msg: "bad request" });
   }
-  return db.query(queryStr, queryValues).then((result) => {
-    return result.rows[0];
+  return db.query(queryStr, queryValues).then(({ rows }) => {
+    if (!rows.length) {
+      return Promise.reject({
+        status: 404,
+        msg: `no article found for article_id ${article_id}`,
+      });
+    }
+    return rows[0];
   });
 };
