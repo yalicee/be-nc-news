@@ -9,7 +9,7 @@ app.use("/*", (req, res, next) => {
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).send({ msg: `bad method: cannot specify ${req.query}` });
+  res.status(500).send({ msg: "internal server error" });
 });
 
 module.exports = app;
