@@ -12,9 +12,10 @@ exports.getTopics = (req, res, next) => {
 
 exports.patchArticle = (req, res, next) => {
   const { article_id } = req.params;
-  updateArticle(article_id)
+  const input = req.body;
+  updateArticle(article_id, input)
     .then((article) => {
-      res.status.send(201).send({ article });
+      res.status(201).send({ article });
     })
     .catch((err) => {
       console.log(err);
