@@ -11,8 +11,7 @@ exports.selectTopics = () => {
 
 exports.selectArticleById = (article_id) => {
   const queryValues = [article_id];
-  let queryStr = "SELECT * FROM articles";
-  queryStr += " WHERE article_id = $1";
+  let queryStr = "SELECT * FROM articles WHERE article_id = $1";
 
   if (isNaN(article_id)) {
     return Promise.reject({ status: 400, msg: "bad request" });
