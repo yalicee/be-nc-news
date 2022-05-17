@@ -24,7 +24,7 @@ app.patch("/api/articles/:article_id", patchArticle);
 
 app.get("/api/users", getUsers);
 
-app.use("/*", handlesNotFoundErrors);
+app.use(handlesNotFoundErrors);
 
 app.use(handlesPSQLErrors);
 
