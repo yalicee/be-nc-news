@@ -162,4 +162,12 @@ describe("GET /api/users", () => {
         });
       });
   });
+  test("404: responds with not found if given wrong path", () => {
+    return request(app)
+      .get("/api/losers")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("not found");
+      });
+  });
 });
