@@ -1,14 +1,5 @@
 const db = require("../db/connection");
 
-exports.selectTopics = () => {
-  const queryValues = [];
-  let queryStr = "SELECT * FROM topics";
-
-  return db.query(queryStr, queryValues).then(({ rows }) => {
-    return rows;
-  });
-};
-
 exports.selectArticleById = (article_id) => {
   const queryValues = [article_id];
   let queryStr = "SELECT * FROM articles WHERE article_id = $1";
@@ -23,6 +14,16 @@ exports.selectArticleById = (article_id) => {
         msg: `no article found for article_id ${article_id}`,
       });
     }
+    return rows[0];
+  });
+};
+
+exports.updateArticle = (article_id, input) => {
+  const value = input.inc_votes;
+  const queryValues = [value, article_id];
+  const queryStr =
+    "UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *";
+  return db.query(queryStr, queryValues).then(({ rows }) => {
     return rows[0];
   });
 };
