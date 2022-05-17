@@ -22,10 +22,12 @@ describe("GET /api/topics", () => {
         expect(topics).toBeInstanceOf(Array);
         expect(topics).toHaveLength(3);
         topics.forEach((topic) => {
-          expect(topic).toMatchObject({
-            description: expect.any(String),
-            slug: expect.any(String),
-          });
+          expect(topic).toEqual(
+            expect.objectContaining({
+              description: expect.any(String),
+              slug: expect.any(String),
+            })
+          );
         });
       });
   });
@@ -155,15 +157,17 @@ describe("GET /api/users", () => {
       .get("/api/users")
       .expect(200)
       .then(({ body }) => {
-        const { topics } = body;
-        expect(topics).toBeInstanceOf(Array);
-        expect(topics).toHaveLength(4);
-        topics.forEach((topic) => {
-          expect(topic).toMatchObject({
-            username: expect.any(String),
-            name: expect.any(String),
-            avatar_url: expect.any(String),
-          });
+        const { users } = body;
+        expect(users).toBeInstanceOf(Array);
+        expect(users).toHaveLength(4);
+        users.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
         });
       });
   });
