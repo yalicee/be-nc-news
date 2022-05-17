@@ -40,7 +40,7 @@ describe("GET /api/topics", () => {
 });
 
 describe("PATCH /api/artices/:articled_id", () => {
-  test("201: request body is accepted and responds with updated article", () => {
+  test("201: request body is accepted and responds with updated article, positive increment vote", () => {
     const updatedArticle1 = {
       inc_votes: 1,
     };
@@ -58,6 +58,27 @@ describe("PATCH /api/artices/:articled_id", () => {
           body: "I find this existence challenging",
           created_at: expect.any(String),
           votes: 101,
+        });
+      });
+  });
+  test("201: request body is accepted and responds with updated article, negative increment vote", () => {
+    const updatedArticle2 = {
+      inc_votes: -100,
+    };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(updatedArticle2)
+      .expect(201)
+      .then(({ body }) => {
+        const { article } = body;
+        expect(article).toEqual({
+          article_id: 1,
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: expect.any(String),
+          votes: 0,
         });
       });
   });
