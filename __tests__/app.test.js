@@ -33,7 +33,8 @@ describe("GET /api/topics", () => {
     return request(app)
       .get("/api/megascopics")
       .expect(404)
-      .then(({ body: { msg } }) => {
+      .then(({ body }) => {
+        const { msg } = body;
         expect(msg).toBe("not found");
       });
   });
@@ -63,7 +64,8 @@ describe("GET /api/articles/:articles_id", () => {
     return request(app)
       .get("/api/articles/article_5")
       .expect(400)
-      .then(({ body: { msg } }) => {
+      .then(({ body }) => {
+        const { msg } = body;
         expect(msg).toBe("bad request");
       });
   });
@@ -71,7 +73,8 @@ describe("GET /api/articles/:articles_id", () => {
     return request(app)
       .get("/api/articles/99999999")
       .expect(404)
-      .then(({ body: { msg } }) => {
+      .then(({ body }) => {
+        const { msg } = body;
         expect(msg).toBe("no article found for article_id 99999999");
       });
   });
@@ -128,7 +131,8 @@ describe("PATCH /api/artices/:articled_id", () => {
       .patch("/api/articles/1")
       .send(updatedArticle1)
       .expect(400)
-      .then(({ body: { msg } }) => {
+      .then(({ body }) => {
+        const { msg } = body;
         expect(msg).toBe("bad request");
       });
   });
@@ -138,7 +142,8 @@ describe("PATCH /api/artices/:articled_id", () => {
       .patch("/api/articles/1")
       .send(updatedArticle1)
       .expect(400)
-      .then(({ body: { msg } }) => {
+      .then(({ body }) => {
+        const { msg } = body;
         expect(msg).toBe("bad request");
       });
   });
@@ -166,19 +171,21 @@ describe("GET /api/users", () => {
     return request(app)
       .get("/api/losers")
       .expect(404)
-      .then(({ body: { msg } }) => {
+      .then(({ body }) => {
+        const { msg } = body;
         expect(msg).toBe("not found");
       });
   });
 });
 
-describe.only("GET /api/articles", () => {
+describe("GET /api/articles", () => {
   test("200: responds with an array of article objects", () => {
     return request(app)
       .get("/api/articles")
       .expect(200)
       .then(({ body }) => {
         const { articles } = body;
+        expect(articles).toHaveLength(12);
         expect(articles).toBeInstanceOf(Array);
         articles.forEach((article) => {
           expect(article).toEqual(
@@ -200,7 +207,8 @@ describe.only("GET /api/articles", () => {
     return request(app)
       .get("/api/barnacles")
       .expect(404)
-      .then(({ body: { msg } }) => {
+      .then(({ body }) => {
+        const { msg } = body;
         expect(msg).toBe("not found");
       });
   });
