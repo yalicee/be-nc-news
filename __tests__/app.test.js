@@ -55,25 +55,13 @@ describe("GET /api/articles/:articles_id", () => {
           body: expect.any(String),
           created_at: expect.any(String),
           votes: expect.any(Number),
+          comment_count: expect.any(Number),
         });
       });
   });
   test("400: responds with bad request if given wrong article_id", () => {
     return request(app)
       .get("/api/articles/article_5")
-
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("bad request");
-      });
-  });
-  test("400: incorrect type, responds with bad request ", () => {
-    const updatedArticle1 = {
-      inc_votes: "string",
-    };
-    return request(app)
-      .patch("/api/articles/1")
-      .send(updatedArticle1)
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("bad request");
@@ -130,6 +118,18 @@ describe("PATCH /api/artices/:articled_id", () => {
           created_at: expect.any(String),
           votes: 0,
         });
+      });
+  });
+  test("400: incorrect type, responds with bad request ", () => {
+    const updatedArticle1 = {
+      inc_votes: "string",
+    };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(updatedArticle1)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("bad request");
       });
   });
   test("400: malformed body / missing required fields, responds with bad request ", () => {
