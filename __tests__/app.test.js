@@ -48,32 +48,20 @@ describe("GET /api/articles/:articles_id", () => {
         const { article } = body;
         expect(article.article_id).toBe(1);
         expect(article).toMatchObject({
-          title: expect.any(String),
-          topic: expect.any(String),
-          author: expect.any(String),
-          article_id: expect.any(Number),
-          body: expect.any(String),
-          created_at: expect.any(String),
-          votes: expect.any(Number),
+          article_id: 1,
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 100,
+          comment_count: "11",
         });
       });
   });
   test("400: responds with bad request if given wrong article_id", () => {
     return request(app)
       .get("/api/articles/article_5")
-
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("bad request");
-      });
-  });
-  test("400: incorrect type, responds with bad request ", () => {
-    const updatedArticle1 = {
-      inc_votes: "string",
-    };
-    return request(app)
-      .patch("/api/articles/1")
-      .send(updatedArticle1)
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("bad request");
@@ -130,6 +118,18 @@ describe("PATCH /api/artices/:articled_id", () => {
           created_at: expect.any(String),
           votes: 0,
         });
+      });
+  });
+  test("400: incorrect type, responds with bad request ", () => {
+    const updatedArticle1 = {
+      inc_votes: "string",
+    };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(updatedArticle1)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("bad request");
       });
   });
   test("400: malformed body / missing required fields, responds with bad request ", () => {
