@@ -8,22 +8,17 @@ exports.selectArticleById = (article_id) => {
     return Promise.reject({ status: 400, msg: "bad request" });
   }
 
-  let commentQueryStr = "SELECT * FROM comments WHERE article_id = $1";
-  const articlePromise = db.query(queryStr, queryValues);
-  const commentPromise = db.query(commentQueryStr, queryValues);
-  const promises = [articlePromise, commentPromise];
-  return Promise.all(promises).then((result) => {
-    const articleObj = result[0].rows[0];
+  queryStr =
+    "SELECT articles.*, COUNT(comments.article_id) AS comment_count FROM articles LEFT JOIN comments on comments.article_id = articles.article_id WHERE articles.article_id = $1 GROUP BY articles.article_id";
 
-    if (result[0].rows.length) {
-      articleObj.comment_count = result[1].rows.length;
-    } else {
+  return db.query(queryStr, queryValues).then((result) => {
+    if (!result.rows.length) {
       return Promise.reject({
         status: 404,
         msg: `no article found for article_id ${article_id}`,
       });
     }
-    return articleObj;
+    return result.rows[0];
   });
 };
 

@@ -48,14 +48,14 @@ describe("GET /api/articles/:articles_id", () => {
         const { article } = body;
         expect(article.article_id).toBe(1);
         expect(article).toMatchObject({
-          title: expect.any(String),
-          topic: expect.any(String),
-          author: expect.any(String),
-          article_id: expect.any(Number),
-          body: expect.any(String),
-          created_at: expect.any(String),
-          votes: expect.any(Number),
-          comment_count: expect.any(Number),
+          article_id: 1,
+          title: "Living in the shadow of a great man",
+          topic: "mitch",
+          author: "butter_bridge",
+          body: "I find this existence challenging",
+          created_at: "2020-07-09T20:11:00.000Z",
+          votes: 100,
+          comment_count: "11",
         });
       });
   });
