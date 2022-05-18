@@ -267,3 +267,54 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: request body is accepted and responds with the posted comment object", () => {
+    const newComment = {
+      username: "icellusedkars",
+      body: "you are not good at writing news articles",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body }) => {
+        const { comment } = body;
+        expect(comment).toMatchObject(
+          expect.objectContaining({
+            article_id: 1,
+            author: "icellusedkars",
+            body: "you are not good at writing news articles",
+            comment_id: expect.any(Number),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          })
+        );
+      });
+  });
+  test("400: incorrect username responds with bad request ", () => {
+    const newComment = {
+      username: "pumpkin",
+      body: "laura ate some dollar pizza",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request");
+      });
+  });
+  test("400: malformed body / missing required fields, responds with bad request ", () => {
+    const newComment = {};
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request");
+      });
+  });
+});
