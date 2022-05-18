@@ -285,9 +285,9 @@ describe("POST /api/articles/:article_id/comments", () => {
             article_id: 1,
             author: "icellusedkars",
             body: "you are not good at writing news articles",
-            comment_id: expect.any(Number),
+            comment_id: 19,
             created_at: expect.any(String),
-            votes: expect.any(Number),
+            votes: 0,
           })
         );
       });
@@ -310,6 +310,31 @@ describe("POST /api/articles/:article_id/comments", () => {
     const newComment = {};
     return request(app)
       .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request");
+      });
+  });
+  test("400: invalid article_id, responds with bad request ", () => {
+    const newComment = {};
+    return request(app)
+      .post("/api/articles/9999999/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request");
+      });
+  });
+  test("400: invalid body type, responds with bad request ", () => {
+    const newComment = {
+      username: "icellusedkars",
+      body: 420,
+    };
+    return request(app)
+      .post("/api/articles/9999999/comments")
       .send(newComment)
       .expect(400)
       .then(({ body }) => {
