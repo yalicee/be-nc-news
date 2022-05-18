@@ -217,3 +217,53 @@ describe("GET /api/articles", () => {
       });
   });
 });
+
+describe("GET /api/articles/:article_id/comments", () => {
+  test("200: responds with an array of comment objects", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body }) => {
+        const { comments } = body;
+        expect(comments).toBeInstanceOf(Array);
+        expect(comments).toHaveLength(11);
+        expect(comments[0]).toEqual(
+          expect.objectContaining({
+            comment_id: 2,
+            body: "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.",
+            article_id: 1,
+            author: "butter_bridge",
+            votes: 14,
+            created_at: "2020-10-31T03:03:00.000Z",
+          })
+        );
+      });
+  });
+  test("400: responds with bad request if given wrong article_id data type", () => {
+    return request(app)
+      .get("/api/articles/article_5/comments")
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request");
+      });
+  });
+  test("404: responds with invalid filepath if given wrong article_id", () => {
+    return request(app)
+      .get("/api/articles/99999999/comments")
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("no comments found for article_id 99999999");
+      });
+  });
+  test("404: responds with not found if given wrong filepath", () => {
+    return request(app)
+      .get("/api/articles/1/commentttss")
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("not found");
+      });
+  });
+});
