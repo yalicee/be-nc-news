@@ -30,10 +30,8 @@ exports.patchArticle = (req, res, next) => {
 exports.getArticles = (req, res, next) => {
   const { sort_by, order } = req.query;
   let filter = {};
-  for (let key in req.query) {
-    if (key !== "sort_by" && key !== "order") {
-      filter[key] = req.query[key];
-    }
+  if (!sort_by && !order) {
+    filter = req.query;
   }
   selectArticles(order, sort_by, filter)
     .then((articles) => {
