@@ -190,6 +190,7 @@ describe("GET /api/articles", () => {
         .expect(200)
         .then(({ body }) => {
           const { articles } = body;
+          expect(articles).toBeInstanceOf(Array);
           expect(articles).toBeSortedBy("article_id", { descending: true });
         });
     });
@@ -199,6 +200,7 @@ describe("GET /api/articles", () => {
         .expect(200)
         .then(({ body }) => {
           const { articles } = body;
+          expect(articles).toBeInstanceOf(Array);
           expect(articles).toBeSortedBy("created_at", { ascending: true });
         });
     });
@@ -221,6 +223,17 @@ describe("GET /api/articles", () => {
               votes: 0,
             })
           );
+        });
+    });
+    test("200: for multiple queries, should respond with an array of mitch article objects, sorted by article_id with order ascending", () => {
+      return request(app)
+        .get("/api/articles?topic=mitch&sort_by=article_id&order=asc")
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles).toBeInstanceOf(Array);
+          expect(articles).toBeSortedBy("article_id", { ascending: true });
+          articles.forEach((article) => expect(article.topic).toBe("mitch"));
         });
     });
     test("400: stops invalid sort_by queries and responds with bad request", () => {
