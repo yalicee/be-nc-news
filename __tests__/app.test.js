@@ -225,21 +225,18 @@ describe("GET /api/articles/:article_id/comments", () => {
       .expect(200)
       .then(({ body }) => {
         const { comments } = body;
-
         expect(comments).toBeInstanceOf(Array);
         expect(comments).toHaveLength(11);
-        comments.forEach((comment) => {
-          expect(comment).toEqual(
-            expect.objectContaining({
-              article_id: 1,
-              comment_id: expect.any(Number),
-              votes: expect.any(Number),
-              created_at: expect.any(String),
-              author: expect.any(String),
-              body: expect.any(String),
-            })
-          );
-        });
+        expect(comments[0]).toEqual(
+          expect.objectContaining({
+            comment_id: 2,
+            body: "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.",
+            article_id: 1,
+            author: "butter_bridge",
+            votes: 14,
+            created_at: "2020-10-31T03:03:00.000Z",
+          })
+        );
       });
   });
   test("400: responds with bad request if given wrong article_id data type", () => {
