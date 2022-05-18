@@ -2,7 +2,7 @@ const {
   updateArticle,
   selectArticleById,
   selectArticles,
-} = require("../models/articles.model");
+} = require("../models/articles.models");
 
 exports.getArticleById = (req, res, next) => {
   const { article_id } = req.params;
@@ -28,7 +28,14 @@ exports.patchArticle = (req, res, next) => {
 };
 
 exports.getArticles = (req, res, next) => {
-  selectArticles()
+  const { sort_by, order } = req.query;
+  let filter = {};
+  for (let key in req.query) {
+    if (key !== "sort_by" && key !== "order") {
+      filter[key] = req.query[key];
+    }
+  }
+  selectArticles(order, sort_by, filter)
     .then((articles) => {
       res.status(200).send({ articles });
     })

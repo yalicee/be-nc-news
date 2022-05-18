@@ -183,6 +183,77 @@ describe("GET /api/users", () => {
 });
 
 describe("GET /api/articles", () => {
+  describe("should work with sort_by, order and topic queries", () => {
+    test("200: should respond with array sorted by article_id, order defaults to descending", () => {
+      return request(app)
+        .get("/api/articles?sort_by=article_id")
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles).toBeSortedBy("article_id", { descending: true });
+        });
+    });
+    test("200: should respond with array ordered by ascending, sort_by defaults to created_at", () => {
+      return request(app)
+        .get("/api/articles?order=asc")
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles).toBeSortedBy("created_at", { ascending: true });
+        });
+    });
+    test("200: should respond with array of one cat article object when filtered by topic cats", () => {
+      return request(app)
+        .get("/api/articles?topic=cats")
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body;
+          expect(articles).toHaveLength(1);
+          expect(articles[0]).toEqual(
+            expect.objectContaining({
+              article_id: 5,
+              title: "UNCOVERED: catspiracy to bring down democracy",
+              topic: "cats",
+              author: "rogersop",
+              body: "Bastet walks amongst us, and the cats are taking arms!",
+              comment_count: "2",
+              created_at: expect.any(String),
+              votes: 0,
+            })
+          );
+        });
+    });
+    test("400: stops invalid sort_by queries and responds with bad request", () => {
+      return request(app)
+        .get("/api/articles?sort_by=quantity")
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("bad request: cannot sort by 'quantity'");
+        });
+    });
+    test("400: stops invalid order queries and responds with bad request", () => {
+      return request(app)
+        .get("/api/articles?order=rupaul")
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe(
+            "bad request: cannot order by 'rupaul', ASC or DESC only"
+          );
+        });
+    });
+    test("400: stops invalid filter types and responds with bad request", () => {
+      return request(app)
+        .get("/api/articles?positive=10")
+        .expect(400)
+        .then(({ body }) => {
+          const { msg } = body;
+          expect(msg).toBe("bad request");
+        });
+    });
+  });
+
   test("200: responds with an array of article objects", () => {
     return request(app)
       .get("/api/articles")
