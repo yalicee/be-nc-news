@@ -465,9 +465,10 @@ describe("GET /api", () => {
     return request(app)
       .get("/api")
       .expect(200)
-      .then(({ body }) => {
+      .then(({ type, body }) => {
         const { endpoints } = body;
         expect(endpoints).toEqual(endpoints);
+        expect(type).toBe("application/json");
       });
   });
 });
