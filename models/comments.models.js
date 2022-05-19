@@ -29,3 +29,23 @@ exports.insertComment = (article_id, inputComment) => {
     return result.rows[0];
   });
 };
+
+exports.removeComment = (comment_id) => {
+  if (isNaN(comment_id)) {
+    return Promise.reject({ status: 400, msg: "bad request" });
+  }
+
+  return db
+    .query("DELETE FROM comments WHERE comment_id = $1 RETURNING *", [
+      comment_id,
+    ])
+    .then((result) => {
+      if (!result.rows.length) {
+        console.log(result.rows.length);
+        return Promise.reject({
+          status: 404,
+          msg: `no comment found for comment_id ${comment_id}`,
+        });
+      }
+    });
+};

@@ -7,6 +7,7 @@ const {
 const {
   getCommentsByArticleId,
   postComment,
+  deleteComment,
 } = require("./controllers/comments.controllers");
 const {
   handlesPSQLErrors,
@@ -33,6 +34,8 @@ app.get("/api/users", getUsers);
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
 app.post("/api/articles/:article_id/comments", postComment);
+
+app.delete("/api/comments/:comment_id", deleteComment);
 
 app.use(handlesNotFoundErrors);
 

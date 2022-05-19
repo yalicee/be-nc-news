@@ -429,3 +429,32 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("DELETE /api/comments/:comment_id", () => {
+  test("status: 204, responds with an empty body", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(({ body }) => {
+        expect(body).toEqual({});
+      });
+  });
+  test("404: resource does not exist, responds with not found", () => {
+    return request(app)
+      .delete("/api/comments/999999")
+      .expect(404)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("no comment found for comment_id 999999");
+      });
+  });
+  test("400: invalid comment_id, responds with bad request ", () => {
+    return request(app)
+      .delete("/api/comments/id_no_8")
+      .expect(400)
+      .then(({ body }) => {
+        const { msg } = body;
+        expect(msg).toBe("bad request");
+      });
+  });
+});
