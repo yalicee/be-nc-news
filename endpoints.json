@@ -75,7 +75,6 @@
     "description": "deletes the specified comment with comment_id and does not serve body back",
     "queries": [],
     "exampleResponse": {
-      "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   }
 }
