@@ -3,6 +3,7 @@ const app = require("../app");
 const db = require("../db/connection");
 const seed = require("../db/seeds/seed");
 const testData = require("../db/data/test-data/index");
+const endpoints = require("../endpoints.json");
 
 beforeEach(() => {
   return seed(testData);
@@ -455,6 +456,18 @@ describe("DELETE /api/comments/:comment_id", () => {
       .then(({ body }) => {
         const { msg } = body;
         expect(msg).toBe("bad request");
+      });
+  });
+});
+
+describe("GET /api", () => {
+  test("200: responds with endpoints object", () => {
+    return request(app)
+      .get("/api")
+      .expect(200)
+      .then(({ body }) => {
+        const { endpoints } = body;
+        expect(endpoints).toEqual(endpoints);
       });
   });
 });
