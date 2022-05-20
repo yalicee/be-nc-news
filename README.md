@@ -12,7 +12,7 @@ This project requires: Node.js (v17. or above) and PostgreSQL (v13.6 or above).
 
 ### Setup environment variables
 
-After cloning the reop you will need to two .env files at the rool level for your project: .env.test and .env.development. In .env.test, add PGDATABASE=<database_name_here_test> and in .env.development add PGDATABASE<database_name_here>
+After cloning the repo you will need to two .env files at the rool level for your project: .env.test and .env.development. In .env.test, add PGDATABASE=<database_name_here_test> and in .env.development add PGDATABASE<database_name_here>
 
 These will automatically be ignored in the .gitignore file
 
