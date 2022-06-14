@@ -33,7 +33,7 @@ To setup and test this project:
 ### Endpoints Index
 
 1. GET /api/topics
-2. GET /api/articlse
+2. GET /api/articles
 3. GET /api/articles/:article_id
 4. GET /api/articles/:article_id/comments
 5. PATCH /api/articles/:article_id
@@ -136,7 +136,7 @@ Responds with JSON-encoded object with with property article, whose value is the
 
 #### 4. GET /api/articles/:article_id/comments
 
-### Desccription
+### Description
 
 Responds with an array of comment objects for the specified article.
 
